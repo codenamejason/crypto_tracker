@@ -20,16 +20,16 @@ class App extends Component {
   }
 
   //getting&setting cryptocurrencies data
-  getData = () => {
+  getData = async () => {
     //getting ccurencies data
     axios({
       "method":"GET",
       "url":"https://coinpaprika1.p.rapidapi.com/tickers",
       "headers":{
-        "content-type":"application/octet-stream",
-        "x-rapidapi-host":"coinpaprika1.p.rapidapi.com",
-        "x-rapidapi-key":"YOUR_RAPID_API_KEY",
-        "useQueryString":true
+        "content-type": "application/octet-stream",
+        "x-rapidapi-host": "coinpaprika1.p.rapidapi.com",
+        "x-rapidapi-key": "d8bd2a2ab5msh6fd7251d8ec6e50p1c55bfjsn039b77a1f13b",
+        "useQueryString": true
       }
     })
     .then((response)=>{
@@ -37,27 +37,27 @@ class App extends Component {
       const coins = response.data
       //declare ccurencies and their imgs
       const ccArray = [
-        { name: 'Bitcoin', img: btc },
-        { name: 'Ethereum', img: eth },
-        { name: 'Chainlink', img: link },
-        { name: 'Cardano', img: ada },
-        { name: 'Monero', img: xmr },
-        { name: 'yearn.finance', img: yfi },
-        { name: 'Aave', img: lend },
-        { name: 'Compound', img: comp },
-        { name: 'Uniswap', img: uni },
-        { name: 'Golem', img: gnt }
+        { name: 'Bitcoin', img: btc, supply: 0 },
+        { name: 'Ethereum', img: eth, supply: 0 },
+        { name: 'Chainlink', img: link, supply: 0 },
+        { name: 'Cardano', img: ada, supply: 0 },
+        { name: 'Monero', img: xmr, supply: 0 },
+        { name: 'yearn.finance', img: yfi, supply: 0 },
+        { name: 'Aave', img: lend, supply: 0 },
+        { name: 'Compound', img: comp, supply: 0 },
+        { name: 'Uniswap', img: uni, supply: 0 },
+        { name: 'Golem', img: gnt, supply: 0 }
       ]
 
       /* search for chosen cryptocurrencies, then add them to the state */
       //get ccurency from ccArray 
-      for(let j=0; j<ccArray.length; j++){
+      for(let j=0; j < ccArray.length; j++){
         //get ccurrency from API
-        for (let i=0; i<coins.length; i++){
+        for (let i=0; i < coins.length; i++){
           //if current ccurrency API == current ccurrency from ccArray
           if(coins[i].name === ccArray[j].name){
             //add img to the ccurrency API data
-            coins[i]['img'] = ccArray[j].img
+            coins[i].img = ccArray[j].img;
             //set state with updated data
             this.setState({
               ccData: [...this.state.ccData, coins[i]]
@@ -81,7 +81,7 @@ class App extends Component {
       "headers":{
       "content-type":"application/octet-stream",
       "x-rapidapi-host":"coinpaprika1.p.rapidapi.com",
-      "x-rapidapi-key":"YOUR_RAPID_API_KEY",
+      "x-rapidapi-key":"d8bd2a2ab5msh6fd7251d8ec6e50p1c55bfjsn039b77a1f13b",
       "useQueryString":true
       }
     })
@@ -148,6 +148,7 @@ class App extends Component {
                         <th scope="col">Name</th>
                         <th scope="col">Price</th>
                         <th scope="col">Market Cap</th>
+                        <th scope="col">Circulating Supply</th>
                       </tr>
                     </thead>
                       <tbody>
@@ -158,13 +159,14 @@ class App extends Component {
                               <td><img src={data.img} width="25" height="25" className="d-inline-block align-top" alt="" /></td>
                               <td><a target="_blank" rel="noopener noreferrer" href={"https://coinpaprika.com/coin/" + data.id}>{data.name}</a></td>
                               <td>${(data.quotes.USD.price).toFixed(2)}</td>
-                              <td>${(data.quotes.USD.market_cap).toLocaleString("fr-CH")}</td>
+                              <td>${(data.quotes.USD.market_cap).toLocaleString("en-US")}</td>
+                              <td>{data.circulating_supply.toLocaleString("en-US")}</td>
                             </tr>
                           )
                         })}
                       </tbody>
                   </table>
-                }
+                
               </main>
             </div>
           </div>
